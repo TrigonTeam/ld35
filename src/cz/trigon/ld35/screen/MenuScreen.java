@@ -74,7 +74,7 @@ public class MenuScreen extends ScreenBase {
 
     @Override
     public void renderTick(float ptt) {
-        this.drawClouds();
+        MenuScreen.drawClouds(this.game, this.cloudsTex);
 
         this.game.getApi().getRenderer().color(Color.WHITE);
 
@@ -97,20 +97,20 @@ public class MenuScreen extends ScreenBase {
             this.f.drawString(s, this.game.getWindow().getCentre().x(), y);
 
             i++;
-            y += this.f.getStringHeight(s) + 5;
+            y += this.f.getStringHeight(s) + 10;
         }
     }
 
-    public void drawClouds() {
+    public static void drawClouds(cz.dat.gaben.api.game.Game game, ITexture cloudsTex) {
         float so = (float) (System.nanoTime() / 10000000000D);
         float som = so * 0.5f;
         float son = so * 0.42f;
-        int size = this.game.getWidth();
-        IRenderer r = this.game.getApi().getRenderer();
+        int size = game.getWidth();
+        IRenderer r = game.getApi().getRenderer();
 
         r.color(Game.MAT_GREY_800);
 
-        r.texture(this.cloudsTex);
+        r.texture(cloudsTex);
 
         r.texCoord(0 + so, 0 + so);
         r.vertex(0, 0);

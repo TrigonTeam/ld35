@@ -2,7 +2,7 @@ package cz.trigon.ld35;
 
 import cz.dat.gaben.api.interfaces.ITextureManager;
 import cz.dat.gaben.util.Color;
-import cz.dat.gaben.util.Vector2;
+import cz.trigon.ld35.screen.AboutScreen;
 import cz.trigon.ld35.screen.MenuScreen;
 
 public class Game extends cz.dat.gaben.api.game.Game {
@@ -18,10 +18,11 @@ public class Game extends cz.dat.gaben.api.game.Game {
         ITextureManager t = this.getApi().getTexture();
         this.getWindow().setTitle("Vibrovachka");
         this.getContent().getFilesFromDirectory("textures").forEach(f -> t.loadTexture(f.substring(9), f));
-        this.getApi().getFont().loadFont("basic", "mammagamma", 64);
+        this.getApi().getFont().loadFont("basic", "mammagamma", 128);
         t.finishLoading();
 
         this.addScreen(0, new MenuScreen(this));
+        this.addScreen(3, new AboutScreen(this));
         this.openScreen(0);
     }
 
