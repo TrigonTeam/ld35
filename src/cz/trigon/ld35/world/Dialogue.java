@@ -18,6 +18,7 @@ public abstract class Dialogue {
 
     protected List<Entry> entries;
     protected boolean ended;
+    protected boolean started;
     protected int currentStep;
     protected Game game;
     protected Entity e1, e2;
@@ -52,12 +53,20 @@ public abstract class Dialogue {
         return this.currentStep;
     }
 
+    public boolean hasStarted() {
+        return this.started;
+    }
+
     public boolean hasEnded() {
         return this.ended;
     }
 
+    public void start() {
+        this.started = true;
+    }
+
     public void render() {
-        if (!this.ended) {
+        if (this.started && !this.ended) {
             Entry e = this.entries.get(this.currentStep);
             String line = e.by.getName() + ": " + e.text;
             String[] words = line.split(" ");
@@ -96,10 +105,10 @@ public abstract class Dialogue {
     }
 
     public void onKeyDown(int key) {
-        if(key == IInputManager.Keys.ENTER) {
+        if(this.started && !this.ended && key == IInputManager.Keys.ENTER) {
             this.nextStep();
         }
     }
 
-    public abstract void shouldOccur();
+    public abstract boolean shouldOccur();
 }
