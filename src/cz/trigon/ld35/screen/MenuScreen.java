@@ -110,6 +110,7 @@ public class MenuScreen extends ScreenBase {
 
         r.color(Game.MAT_GREY_800);
 
+        r.enableTexture(true);
         r.texture(cloudsTex);
 
         r.texCoord(0 + so, 0 + so);

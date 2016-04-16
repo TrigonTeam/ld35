@@ -19,6 +19,7 @@ public class Game extends cz.dat.gaben.api.game.Game {
         this.getWindow().setTitle("Vibrovachka");
         this.getContent().getFilesFromDirectory("textures").forEach(f -> t.loadTexture(f.substring(9), f));
         this.getApi().getFont().loadFont("basic", "mammagamma", 128);
+        this.getApi().getFont().loadFont("dialogue", "Slabo27px-Regular", 64);
         t.finishLoading();
 
         this.addScreen(0, new MenuScreen(this));
