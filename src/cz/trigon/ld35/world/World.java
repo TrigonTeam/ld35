@@ -1,5 +1,6 @@
 package cz.trigon.ld35.world;
 
+import cz.dat.gaben.api.interfaces.IRenderer;
 import cz.dat.gaben.util.Color;
 import cz.trigon.ld35.Game;
 
@@ -78,15 +79,15 @@ public abstract class World {
     }
 
     public void render(float ptt) {
-        this.player1.render(ptt);
+        IRenderer g = this.game.getApi().getRenderer();
+    	g.setMatrix(g.identityMatrix().scaleFrom(this.game.getWidth()/2, this.game.getHeight()/2, 1, -1));       
+    	g.setFrontFace(false);
+        
+    	this.player1.render(ptt);
         this.player2.render(ptt);
 
-        this.entities.forEach(e -> e.render(ptt));
-        if (this.currentDialogue != null)
-            this.currentDialogue.render();
-
-        this.game.getApi().getRenderer().clearColor(Color.DARK_GREY);
-        this.game.getApi().getRenderer().enableTexture(false);
+        g.clearColor(Color.DARK_GREY);
+        g.enableTexture(false);
         for (int x = 0; x < this.width; x++) {
             for (int y = 0; y < this.height; y++) {
                 if (this.blocks[x][y] != 0) {
@@ -95,6 +96,13 @@ public abstract class World {
                 }
             }
         }
+        
+    	g.setFrontFace(true);
+    	g.setMatrix(g.identityMatrix());
+    	
+        this.entities.forEach(e -> e.render(ptt));
+        if (this.currentDialogue != null)
+            this.currentDialogue.render();
     }
 
     public void onKeyDown(int key) {
