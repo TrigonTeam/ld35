@@ -23,7 +23,7 @@ public abstract class World {
                 int color = img.getRGB(x, y);
 
                 int blockID = BlockType.getBlockForColor(color).blockNumber;
-                ret[x][y] = blockID;
+                ret[x][h-y-1] = blockID;
             }
         }
 
@@ -85,7 +85,7 @@ public abstract class World {
             this.currentDialogue.render();
 
         // TODO: camera
-        g.setMatrix(Matrix4.createIdentityMatrix().scaleFrom(
+        g.setMatrix(g.identityMatrix().scaleFrom(
                 this.game.getWidth()/2, this.game.getHeight()/2, 1, -1)
                 );
 
