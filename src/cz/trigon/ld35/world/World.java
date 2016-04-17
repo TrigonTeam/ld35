@@ -87,8 +87,7 @@ public abstract class World {
         // TODO: camera
         g.setMatrix(Matrix4.createIdentityMatrix().scaleFrom(
                 this.game.getWidth()/2, this.game.getHeight()/2, 1, -1)
-                .translate(this.game.getWidth() / 2 - this.width * this.bs / 2,
-                this.game.getHeight() / 2 - this.height * this.bs / 2));
+                );
 
     	g.setFrontFace(false);
         g.enableTexture(false);
@@ -121,6 +120,7 @@ public abstract class World {
     }
 
     public void end() {
+        this.game.getApi().getRenderer().setFrontFace(true);
         this.game.getApi().getRenderer().setMatrix(this.game.getApi().getRenderer().identityMatrix());
         this.game.getApi().getRenderer().clearColor(Color.WHITE);
     }

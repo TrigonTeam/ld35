@@ -35,7 +35,7 @@ public abstract class Entity {
         float[] clip = this.bb.moveCollide(this.world, this.velX, this.velY);
 
         if(this.velY != clip[1]) {
-            this.onGround = this.velY > 0;
+            this.onGround = this.velY < 0;
             this.velY = 0;
         } else {
             this.onGround = false;
