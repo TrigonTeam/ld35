@@ -85,9 +85,9 @@ public abstract class World {
             this.currentDialogue.render();
 
         // TODO: camera
-        g.setMatrix(g.identityMatrix().scaleFrom(
-            this.game.getWidth()/2, this.game.getHeight()/2, 1, -1)
-            );
+        g.setMatrix(g.identityMatrix().translate(this.game.getWidth() / 2 - this.width * this.bs / 2,
+                this.game.getHeight() / 2 - this.height * this.bs / 2)
+                .scaleFrom(this.game.getWidth() / 2, this.game.getHeight() / 2, 1, -1));
 
         g.setFrontFace(false);
         g.enableTexture(false);
