@@ -22,7 +22,8 @@ public class MapAABB extends AABB {
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                if (world.getBlock(x, y) != 0) {
+                int bl = world.getBlock(x, y);
+                if (bl != 0 && BlockType.getBlock(bl).collidable) {
                     xa = new AABB(x, y, 1, 1).clipXCollide(this, xa);
                 }
             }
@@ -31,7 +32,8 @@ public class MapAABB extends AABB {
         this.move(xa, 0);
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                if (world.getBlock(x, y) != 0) {
+                int bl = world.getBlock(x, y);
+                if (bl != 0 && BlockType.getBlock(bl).collidable) {
                     ya = new AABB(x, y, 1, 1).clipYCollide(this, ya);
                 }
 

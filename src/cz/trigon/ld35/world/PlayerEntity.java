@@ -5,6 +5,7 @@ import cz.dat.gaben.util.Color;
 
 public class PlayerEntity extends Entity {
 
+    protected float speed = 0.1f;
     protected Color color;
 
     public PlayerEntity(World world, String name, Color color) {
@@ -17,8 +18,16 @@ public class PlayerEntity extends Entity {
     @Override
     public void tick() {
         this.lastBB = new MapAABB(this.bb);
-        if(this.game.getApi().getInput().isKeyDown(IInputManager.Keys.LEFT))
-            this.velX = 0.2f;
+
+        if (this.game.getApi().getInput().isKeyDown(IInputManager.Keys.LEFT)) {
+            this.velX -= this.speed;
+        }
+
+        if (this.game.getApi().getInput().isKeyDown(IInputManager.Keys.RIGHT)) {
+            this.velX += this.speed;
+        }
+
+        this.velX *= 0.65f;
 
         this.move();
     }

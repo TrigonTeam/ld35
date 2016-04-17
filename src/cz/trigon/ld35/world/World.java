@@ -58,7 +58,7 @@ public abstract class World {
     }
 
     public int getBlock(int x, int y) {
-        if(x < this.width && y <this.height)
+        if(x < this.width && y <this.height && x >= 0 && y >= 0)
             return this.blocks[x][y];
 
         return 0;
@@ -112,12 +112,18 @@ public abstract class World {
 }
 
 enum BlockType {
-    NONE(0, 0xFF000000), SOLID(1, 0xFFFFFFFF), WATER(2, 0xFF0000FF), EXIT(3, 0xFF00FF00), CHARGE(4, 0xFFFF0000);
+    NONE(0, 0xFF000000, false), SOLID(1, 0xFFFFFFFF), WATER(2, 0xFF0000FF, false), EXIT(3, 0xFF00FF00, false), CHARGE(4, 0xFFFF0000, false);
 
     public int blockNumber;
     public int blockLoadingColor;
+    public boolean collidable;
 
     BlockType(int num, int color) {
+        this(num, color, true);
+    }
+
+    BlockType(int num, int color, boolean collidable) {
+        this.collidable = collidable;
         this.blockNumber = num;
         this.blockLoadingColor = color;
     }

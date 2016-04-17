@@ -35,10 +35,10 @@ public class WorldOne extends World {
     @Override
     public void start(World prev) {
         this.player1 = new PlayerEntity(this, "Vibrovatchka", Color.GREEN);
-        this.player2 = new PlayerEntity(this, "Vibrovatchka", Color.GREEN);
+        this.player2 = new PlayerEntity(this, "Sratchka", Color.BLUE);
 
         this.player1.bb.setPosition(1.5f, 5);
-        this.player1.bb.setPosition(1.5f, 5);
+        this.player2.bb.setPosition(3, 5);
 
         this.initDialogue();
     }
