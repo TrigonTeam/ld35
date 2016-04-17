@@ -1,6 +1,7 @@
 package cz.trigon.ld35.world;
 
 import cz.dat.gaben.api.exception.ExceptionUtil;
+import cz.dat.gaben.util.Color;
 import cz.trigon.ld35.Game;
 
 import javax.imageio.ImageIO;
@@ -33,19 +34,12 @@ public class WorldOne extends World {
 
     @Override
     public void start(World prev) {
-        this.player1 = new Entity(this, game) {
-            @Override
-            public void tick() {
+        this.player1 = new PlayerEntity(this, "Vibrovatchka", Color.GREEN);
+        this.player2 = new PlayerEntity(this, "Vibrovatchka", Color.GREEN);
 
-            }
+        this.player1.bb.setPosition(1.5f, 5);
+        this.player1.bb.setPosition(1.5f, 5);
 
-            @Override
-            public void render(float ptt) {
-
-            }
-        };
-
-        this.player2 = this.player1;
         this.initDialogue();
     }
 

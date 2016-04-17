@@ -57,7 +57,17 @@ public abstract class World {
         this.entitiesRemove.add(e);
     }
 
+    public int getBlock(int x, int y) {
+        if(x < this.width && y <this.height)
+            return this.blocks[x][y];
+
+        return 0;
+    }
+
     public void tick() {
+        this.player1.tick();
+        this.player2.tick();
+
         this.entities.forEach(Entity::tick);
         this.entitiesAdd.stream().filter(e -> !this.entities.contains(e)).forEach(e -> this.entities.add(e));
         this.entitiesRemove.stream().filter(e -> this.entities.contains(e)).forEach(e -> this.entities.remove(e));
@@ -68,11 +78,14 @@ public abstract class World {
     }
 
     public void render(float ptt) {
+        this.player1.render(ptt);
+        this.player2.render(ptt);
+
         this.entities.forEach(e -> e.render(ptt));
         if (this.currentDialogue != null)
             this.currentDialogue.render();
 
-        this.game.getApi().getRenderer().clearColor(Color.LIGHT_GREY);
+        this.game.getApi().getRenderer().clearColor(Color.DARK_GREY);
         this.game.getApi().getRenderer().enableTexture(false);
         for (int x = 0; x < this.width; x++) {
             for (int y = 0; y < this.height; y++) {
@@ -87,6 +100,10 @@ public abstract class World {
     public void onKeyDown(int key) {
         if(this.currentDialogue != null)
             this.currentDialogue.onKeyDown(key);
+    }
+
+    public int getBlockSize() {
+        return this.bs;
     }
 
     public abstract void start(World previous);

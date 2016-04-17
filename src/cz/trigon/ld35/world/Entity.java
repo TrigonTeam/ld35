@@ -9,28 +9,45 @@ public abstract class Entity {
     protected Game game;
 
     protected boolean collideable;
-    protected AABB aabb;
+    protected MapAABB bb, lastBB;
+    protected AABB renderBB;
     protected String name;
 
-    public Entity(World world, Game game) {
+    protected float velX, velY;
+
+    public Entity(World world, int width, int height) {
         this.world = world;
-        this.game = game;
+        this.game = world.game;
+        this.bb = new MapAABB(0, 0, width, height);
+        this.lastBB = new MapAABB(bb);
     }
 
     public boolean isCollideable() {
         return this.collideable;
     }
     
-    public AABB getAABB() {
-        return this.aabb;
+    public MapAABB getAABB() {
+        return this.bb;
+    }
+
+    public void move() {
+        float[] clip = this.bb.moveCollide(this.world, this.velX, this.velY);
+
+        if(this.velY != clip[1]) {
+            this.velY = 0;
+        }
+
+        if(this.velX != clip[0]) {
+            this.velX = 0;
+        }
     }
 
     public float getX() {
-        return this.aabb.x1();
+        return this.bb.x1();
     }
 
     public float getY() {
-        return this.aabb.y1();
+        return this.bb.y1();
     }
 
     public String getName() {
