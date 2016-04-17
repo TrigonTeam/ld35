@@ -60,7 +60,7 @@ public abstract class World {
     }
 
     public int getBlock(int x, int y) {
-        if(x < this.width && y <this.height && x >= 0 && y >= 0)
+        if (x < this.width && y < this.height && x >= 0 && y >= 0)
             return this.blocks[x][y];
 
         return 0;
@@ -86,10 +86,10 @@ public abstract class World {
 
         // TODO: camera
         g.setMatrix(g.identityMatrix().scaleFrom(
-                this.game.getWidth()/2, this.game.getHeight()/2, 1, -1)
-                );
+            this.game.getWidth()/2, this.game.getHeight()/2, 1, -1)
+            );
 
-    	g.setFrontFace(false);
+        g.setFrontFace(false);
         g.enableTexture(false);
 
         for (int x = 0; x < this.width; x++) {
@@ -105,7 +105,7 @@ public abstract class World {
     }
 
     public void onKeyDown(int key) {
-        if(this.currentDialogue != null)
+        if (this.currentDialogue != null)
             this.currentDialogue.onKeyDown(key);
     }
 
