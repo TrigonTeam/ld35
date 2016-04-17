@@ -1,5 +1,6 @@
 package cz.trigon.ld35.world;
 
+import cz.dat.gaben.api.interfaces.IRenderer;
 import cz.dat.gaben.util.Color;
 import cz.dat.gaben.util.Matrix4;
 import cz.trigon.ld35.Game;
@@ -76,21 +77,27 @@ public abstract class World {
     }
 
     public void render(float ptt) {
-        this.game.getApi().getRenderer().setMatrix(this.game.getApi().getRenderer().identityMatrix());
+        IRenderer g = this.game.getApi().getRenderer();
+
+        g.setFrontFace(true);
+        g.setMatrix(g.identityMatrix());
         if (this.currentDialogue != null)
             this.currentDialogue.render();
 
         // TODO: camera
-        this.game.getApi().getRenderer().setMatrix(Matrix4.createIdentityMatrix().translate(
-                this.game.getWidth() / 2 - this.width * this.bs / 2,
+        g.setMatrix(Matrix4.createIdentityMatrix().scaleFrom(
+                this.game.getWidth()/2, this.game.getHeight()/2, 1, -1)
+                .translate(this.game.getWidth() / 2 - this.width * this.bs / 2,
                 this.game.getHeight() / 2 - this.height * this.bs / 2));
 
-        this.game.getApi().getRenderer().enableTexture(false);
+    	g.setFrontFace(false);
+        g.enableTexture(false);
+
         for (int x = 0; x < this.width; x++) {
             for (int y = 0; y < this.height; y++) {
                 if (this.blocks[x][y] != 0) {
-                    this.game.getApi().getRenderer().color(Color.fromArgb(BlockType.getBlock(this.blocks[x][y]).blockLoadingColor));
-                    this.game.getApi().getRenderer().drawRect(x * this.bs, y * this.bs, (x + 1) * this.bs, (y + 1) * this.bs);
+                    g.color(Color.fromArgb(BlockType.getBlock(this.blocks[x][y]).blockLoadingColor));
+                    g.drawRect(x * this.bs, y * this.bs, (x + 1) * this.bs, (y + 1) * this.bs);
                 }
             }
         }
