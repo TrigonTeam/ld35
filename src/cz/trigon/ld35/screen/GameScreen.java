@@ -1,6 +1,9 @@
 package cz.trigon.ld35.screen;
 
 import cz.dat.gaben.api.game.ScreenBase;
+import cz.dat.gaben.api.impl.lwjgl.LwjglRenderer;
+import cz.dat.gaben.api.interfaces.IInputManager;
+import cz.dat.gaben.util.Matrix4;
 import cz.trigon.ld35.Game;
 import cz.trigon.ld35.world.World;
 import cz.trigon.ld35.world.WorldOne;
@@ -25,6 +28,11 @@ public class GameScreen extends ScreenBase {
     public void onKeyDown(int key) {
         super.onKeyDown(key);
         this.currentWorld.onKeyDown(key);
+
+        if(key == IInputManager.Keys.ESCAPE) {
+            this.currentWorld.end();
+            this.game.openScreen(0);
+        }
     }
 
     @Override

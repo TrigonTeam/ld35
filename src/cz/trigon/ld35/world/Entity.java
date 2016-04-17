@@ -12,6 +12,7 @@ public abstract class Entity {
     protected MapAABB bb, lastBB;
     protected AABB renderBB;
     protected String name;
+    protected boolean onGround;
 
     protected float velX, velY;
 
@@ -34,7 +35,10 @@ public abstract class Entity {
         float[] clip = this.bb.moveCollide(this.world, this.velX, this.velY);
 
         if(this.velY != clip[1]) {
+            this.onGround = this.velY > 0;
             this.velY = 0;
+        } else {
+            this.onGround = false;
         }
 
         if(this.velX != clip[0]) {

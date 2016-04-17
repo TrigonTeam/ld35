@@ -1,6 +1,7 @@
 package cz.trigon.ld35.world;
 
 import cz.dat.gaben.util.Color;
+import cz.dat.gaben.util.Matrix4;
 import cz.trigon.ld35.Game;
 
 import java.awt.image.BufferedImage;
@@ -65,9 +66,6 @@ public abstract class World {
     }
 
     public void tick() {
-        this.player1.tick();
-        this.player2.tick();
-
         this.entities.forEach(Entity::tick);
         this.entitiesAdd.stream().filter(e -> !this.entities.contains(e)).forEach(e -> this.entities.add(e));
         this.entitiesRemove.stream().filter(e -> this.entities.contains(e)).forEach(e -> this.entities.remove(e));
@@ -78,14 +76,15 @@ public abstract class World {
     }
 
     public void render(float ptt) {
-        this.player1.render(ptt);
-        this.player2.render(ptt);
-
-        this.entities.forEach(e -> e.render(ptt));
+        this.game.getApi().getRenderer().setMatrix(this.game.getApi().getRenderer().identityMatrix());
         if (this.currentDialogue != null)
             this.currentDialogue.render();
 
-        this.game.getApi().getRenderer().clearColor(Color.DARK_GREY);
+        // TODO: camera
+        this.game.getApi().getRenderer().setMatrix(Matrix4.createIdentityMatrix().translate(
+                this.game.getWidth() / 2 - this.width * this.bs / 2,
+                this.game.getHeight() / 2 - this.height * this.bs / 2));
+
         this.game.getApi().getRenderer().enableTexture(false);
         for (int x = 0; x < this.width; x++) {
             for (int y = 0; y < this.height; y++) {
@@ -95,6 +94,8 @@ public abstract class World {
                 }
             }
         }
+
+        this.entities.forEach(e -> e.render(ptt));
     }
 
     public void onKeyDown(int key) {
@@ -106,9 +107,16 @@ public abstract class World {
         return this.bs;
     }
 
-    public abstract void start(World previous);
+    public void start(World previous) {
+        this.entities.clear();
+        this.dialogues.clear();
+        this.game.getApi().getRenderer().clearColor(Color.DARK_GREY);
+    }
 
-    public abstract void end();
+    public void end() {
+        this.game.getApi().getRenderer().setMatrix(this.game.getApi().getRenderer().identityMatrix());
+        this.game.getApi().getRenderer().clearColor(Color.WHITE);
+    }
 }
 
 enum BlockType {

@@ -2,6 +2,7 @@ package cz.trigon.ld35.world;
 
 import cz.dat.gaben.api.exception.ExceptionUtil;
 import cz.dat.gaben.util.Color;
+import cz.dat.gaben.util.Matrix4;
 import cz.trigon.ld35.Game;
 
 import javax.imageio.ImageIO;
@@ -23,6 +24,8 @@ public class WorldOne extends World {
     }
 
     private void initDialogue() {
+        this.dialogues.clear();
+
         Dialogue d1 = new EzDialogue(new Dialogue.Entry[] {
                 new Dialogue.Entry(this.player1, "Wow", false),
                 new Dialogue.Entry(this.player1, "What has happened? Where am I? Who are you?", false),
@@ -34,17 +37,16 @@ public class WorldOne extends World {
 
     @Override
     public void start(World prev) {
+        super.start(prev);
+
         this.player1 = new PlayerEntity(this, "Vibrovatchka", Color.GREEN);
         this.player2 = new PlayerEntity(this, "Sratchka", Color.BLUE);
+        this.entities.add(player1);
+        this.entities.add(player2);
 
         this.player1.bb.setPosition(1.5f, 5);
         this.player2.bb.setPosition(3, 5);
 
         this.initDialogue();
-    }
-
-    @Override
-    public void end() {
-
     }
 }

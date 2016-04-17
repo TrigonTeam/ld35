@@ -27,6 +27,11 @@ public class PlayerEntity extends Entity {
             this.velX += this.speed;
         }
 
+        if (this.game.getApi().getInput().isKeyDown(IInputManager.Keys.SPACE) && this.onGround) {
+            this.velY -= this.speed * 8;
+        }
+
+        this.velY += 0.1f;
         this.velX *= 0.65f;
 
         this.move();

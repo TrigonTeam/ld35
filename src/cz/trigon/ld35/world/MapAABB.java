@@ -20,6 +20,10 @@ public class MapAABB extends AABB {
         int minY = (int) exp.getPosition().y() - 1;
         int maxY = (int) exp.getMaxPosition().y() + 1;
 
+        for(Entity e : world.entities) {
+            xa = e.bb.clipXCollide(this, xa);
+        }
+
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 int bl = world.getBlock(x, y);
@@ -30,6 +34,11 @@ public class MapAABB extends AABB {
         }
 
         this.move(xa, 0);
+
+        for(Entity e : world.entities) {
+            ya = e.bb.clipYCollide(this, ya);
+        }
+
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 int bl = world.getBlock(x, y);
