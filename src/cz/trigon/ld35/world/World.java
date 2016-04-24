@@ -85,6 +85,19 @@ public abstract class World {
 
         g.setFrontFace(true);
         g.setMatrix(g.identityMatrix());
+
+        g.enableTexture(false);
+        g.lineWidth(2);
+        g.shapeMode(IRenderer.ShapeMode.OUTLINE);
+        g.color(Game.MAT_BLGREY_600);
+        g.drawRect(10, 10, 210, 35);
+        g.drawRect(this.game.getWidth() - 210, 10, this.game.getWidth() - 10, 35);
+        g.shapeMode(IRenderer.ShapeMode.FILLED);
+        g.color(Game.MAT_LGREEN_500);
+        g.drawRect(12, 12, 208 * this.player1.shiftingEnergy, 33);
+        g.color(Game.MAT_LBLUE_500);
+        g.drawRect(this.game.getWidth() - 208, 12, this.game.getWidth() - 12 - (1f - this.player2.shiftingEnergy) * 200, 33);
+
         if (this.currentDialogue != null)
             this.currentDialogue.render();
 

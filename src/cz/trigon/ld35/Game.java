@@ -20,6 +20,7 @@ public class Game extends cz.dat.gaben.api.game.Game {
     public static final Color MAT_LBLUE_500 = Color.fromArgb(0xFF03A9F4);
     public static final Color MAT_RED_900 = Color.fromArgb(0xFFB71C1C);
     public static final Color MAT_GREEN_900 = Color.fromArgb(0xFF1B5E20);
+    public static final Color MAT_BLGREY_600 = Color.fromArgb(0xFF546E7A);
 
     private TextDataProvider data;
 

@@ -53,14 +53,14 @@ public class PlayerEntity extends Entity {
                 this.shiftingEnergy -= this.shiftingEnergyDecayFactor;
             }
 
-            if (this.game.getApi().getInput().isKeyDown(IInputManager.Keys.S)) {
+            if (this.game.getApi().getInput().isKeyDown(IInputManager.Keys.S) && this.bb.height() > 0.1f) {
                 this.bb = new MapAABB(this.bb.x1(), this.bb.y1(), this.bb.width(), this.bb.height() - 0.1f);
                 this.shiftingEnergy -= this.shiftingEnergyDecayFactor;
             }
         }
 
         if (this.shH && this.shiftingEnergy > 0.1) {
-            if (this.game.getApi().getInput().isKeyDown(IInputManager.Keys.A)) {
+            if (this.game.getApi().getInput().isKeyDown(IInputManager.Keys.A) && this.bb.width() > 0.1f) {
                 this.bb = new MapAABB(this.bb.x1(), this.bb.y1(), this.bb.width() - 0.1f, this.bb.height());
                 this.shiftingEnergy -= this.shiftingEnergyDecayFactor;
             }
@@ -74,11 +74,26 @@ public class PlayerEntity extends Entity {
         this.velY -= 0.1f;
         this.velX *= 0.65f;
 
-        // TODO: charging
-        if (this.shiftingEnergy < 1)
-            this.shiftingEnergy += 0.005f;
+        if (this.shiftingEnergy < 1) {
+            for (int i : this.getBlocksUnder()) {
+                if (i == BlockType.CHARGE.blockNumber) {
+                    this.shiftingEnergy += 0.005f;
+                    this.shiftingEnergy = Math.min(this.shiftingEnergy, 1f);
+                    break;
+                }
+            }
+        }
 
         this.move();
+    }
+
+    private int[] getBlocksUnder() {
+        int[] ret = new int[4];
+        ret[0] = this.world.getBlock((int) this.bb.x1(), (int) this.bb.y1());
+        ret[1] = this.world.getBlock((int) this.bb.x1(), (int) this.bb.y2());
+        ret[2] = this.world.getBlock((int) this.bb.x2(), (int) this.bb.y2());
+        ret[3] = this.world.getBlock((int) this.bb.x2(), (int) this.bb.y1());
+        return ret;
     }
 
     @Override
