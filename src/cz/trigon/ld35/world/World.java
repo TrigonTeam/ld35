@@ -1,5 +1,6 @@
 package cz.trigon.ld35.world;
 
+import cz.dat.gaben.api.interfaces.IInputManager;
 import cz.dat.gaben.api.interfaces.IRenderer;
 import cz.dat.gaben.util.Color;
 import cz.dat.gaben.util.Matrix4;
@@ -34,10 +35,13 @@ public abstract class World {
     protected List<Entity> entities, entitiesAdd, entitiesRemove;
     protected List<Dialogue> dialogues;
     protected Dialogue currentDialogue;
-    protected Entity player1;
-    protected Entity player2;
+    protected PlayerEntity player1;
+    protected PlayerEntity player2;
     protected Game game;
     protected int width, height, bs;
+    protected int selectedPlayer = 1;
+
+    protected Matrix4 worldMatrix;
 
     public World(Game game, int width, int height) {
         this.game = game;
@@ -85,9 +89,7 @@ public abstract class World {
             this.currentDialogue.render();
 
         // TODO: camera
-        g.setMatrix(g.identityMatrix().translate(this.game.getWidth() / 2 - this.width * this.bs / 2,
-                this.game.getHeight() / 2 - this.height * this.bs / 2)
-                .scaleFrom(this.game.getWidth() / 2, this.game.getHeight() / 2, 1, -1));
+        g.setMatrix(this.worldMatrix);
 
         g.setFrontFace(false);
         g.enableTexture(false);
@@ -95,18 +97,34 @@ public abstract class World {
         for (int x = 0; x < this.width; x++) {
             for (int y = 0; y < this.height; y++) {
                 if (this.blocks[x][y] != 0) {
-                    g.color(Color.fromArgb(BlockType.getBlock(this.blocks[x][y]).blockLoadingColor));
-                    g.drawRect(x * this.bs, y * this.bs, (x + 1) * this.bs, (y + 1) * this.bs);
+                    g.color(BlockType.getBlock(this.blocks[x][y]).blockColor);
+                    g.drawRect(x, y, (x + 1), (y + 1));
                 }
             }
         }
 
         this.entities.forEach(e -> e.render(ptt));
+
+        g.color(Color.WHITE);
+        PlayerEntity pl = this.selectedPlayer == 1 ? this.player1 : this.player2;
+        g.drawTriangle(pl.renderBB.x1() + pl.renderBB.width() / 2, pl.renderBB.y2() + 0.3f,
+                pl.renderBB.x1() + pl.renderBB.width() / 2 + 0.2f, pl.renderBB.y2() + 0.5f,
+                pl.renderBB.x1() + pl.renderBB.width() / 2 - 0.2f, pl.renderBB.y2() + 0.5f);
+    }
+
+    public void setSelectedPlayer(int pl) {
+        this.selectedPlayer = pl;
+        this.player1.setMovementLock(pl != 1);
+        this.player2.setMovementLock(pl != 2);
     }
 
     public void onKeyDown(int key) {
         if (this.currentDialogue != null)
             this.currentDialogue.onKeyDown(key);
+
+        if(key == IInputManager.Keys.LEFT_CONTROL || key == IInputManager.Keys.RIGHT_CONTROL) {
+            this.setSelectedPlayer(this.selectedPlayer == 1 ? 2 : 1);
+        }
     }
 
     public int getBlockSize() {
@@ -117,6 +135,11 @@ public abstract class World {
         this.entities.clear();
         this.dialogues.clear();
         this.game.getApi().getRenderer().clearColor(Color.DARK_GREY);
+        this.worldMatrix = this.game.getApi().getRenderer().identityMatrix()
+                .translate(this.game.getWidth() / (this.bs * 2) - this.width / 2,
+                        this.game.getHeight() / (this.bs * 2) - this.height / 2)
+                .scaleFrom(0, 0, this.bs, this.bs)
+                .scaleFrom(this.game.getWidth() / 2, this.game.getHeight() / 2, 1, -1);
     }
 
     public void end() {
@@ -127,20 +150,25 @@ public abstract class World {
 }
 
 enum BlockType {
-    NONE(0, 0xFF000000, false), SOLID(1, 0xFFFFFFFF), WATER(2, 0xFF0000FF, false), EXIT(3, 0xFF00FF00, false), CHARGE(4, 0xFFFF0000, false);
+    NONE(0, 0xFF000000), SOLID(1, 0xFFFFFFFF, Color.WHITE, true), WATER(2, 0xFF0000FF),
+    EXIT(3, 0xFF00FF00, Game.MAT_GREEN_900), CHARGE(4, 0xFFFF0000, Game.MAT_RED_900);
 
     public int blockNumber;
     public int blockLoadingColor;
+    public Color blockColor;
     public boolean collidable;
 
-    BlockType(int num, int color) {
-        this(num, color, true);
+    BlockType(int num, int color) { this(num, color, Color.fromArgb(color), false); }
+
+    BlockType(int num, int color, Color bColor) {
+        this(num, color, bColor, false);
     }
 
-    BlockType(int num, int color, boolean collidable) {
+    BlockType(int num, int color, Color bColor, boolean collidable) {
         this.collidable = collidable;
         this.blockNumber = num;
         this.blockLoadingColor = color;
+        this.blockColor = bColor;
     }
 
     public static BlockType getBlock(int type) {

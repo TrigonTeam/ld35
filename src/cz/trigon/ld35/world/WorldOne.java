@@ -39,14 +39,18 @@ public class WorldOne extends World {
     public void start(World prev) {
         super.start(prev);
 
-        this.player1 = new PlayerEntity(this, "Vibrovatchka", Color.GREEN);
-        this.player2 = new PlayerEntity(this, "Sratchka", Color.BLUE);
+        this.player1 = new PlayerEntity(this, "Vibrovatchka", Game.MAT_LGREEN_500);
+        this.player2 = new PlayerEntity(this, "Sratchka", Game.MAT_LBLUE_500);
         this.entities.add(player1);
         this.entities.add(player2);
 
         this.player1.bb.setPosition(1.5f, 5);
         this.player2.bb.setPosition(3, 5);
 
+        this.player1.setShiftingDirection(true, false);
+        this.player2.setShiftingDirection(false, true);
+
+        this.setSelectedPlayer(1);
         this.initDialogue();
     }
 }

@@ -16,6 +16,10 @@ public class Game extends cz.dat.gaben.api.game.Game {
 
     public static final Color MAT_BLUE_800 = Color.fromArgb(0xFF1565C0);
     public static final Color MAT_GREY_800 = Color.fromArgb(0xFF424242);
+    public static final Color MAT_LGREEN_500 = Color.fromArgb(0xFF8BC34A);
+    public static final Color MAT_LBLUE_500 = Color.fromArgb(0xFF03A9F4);
+    public static final Color MAT_RED_900 = Color.fromArgb(0xFFB71C1C);
+    public static final Color MAT_GREEN_900 = Color.fromArgb(0xFF1B5E20);
 
     private TextDataProvider data;
 
@@ -26,6 +30,8 @@ public class Game extends cz.dat.gaben.api.game.Game {
     @Override
     public void init() {
         super.init();
+
+        this.getWindow().setFpsLimit(120, true);
 
         ITextureManager t = this.getApi().getTexture();
         this.getWindow().setTitle("Vibrovatchka");
